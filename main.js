@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const controller = renderer.xr.getController(0);
         scene.add(controller);
         controller.addEventListener('select', () => {
-            const geometry = new THREE.BoxGeometry(0.06,0.06,0.06);
+            const geometry = new THREE.BoxGeometry(0.06, 0.06, 0.06);
             const material = new THREE.MeshBasicMaterial({color: 0xffffff * Math.random()});
             const mesh = new THREE.Mesh(geometry, material);
 
@@ -44,14 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const hitTestSource = await session.requestHitTestSource({space: viewerReferenceSpace});
             renderer.setAnimationLoop((timestamp, frame) => {
                 if(!frame) return;
-
                 const hitTestResults = frame.getHitTestResults(hitTestSource);
-                if (getHitTestResults.length > 0){
+                if (hitTestResults.length > 0){
                     const hit = hitTestResults[0];
                     const referenceSpace = renderer.xr.getReferenceSpace();
                     const hitPose = hit.getPose(referenceSpace);
                     reticle.visible = true;
-                    reticle.matrix.fromArray(hitPose.transfrom.matrix);
+                    reticle.matrix.fromArray(hitPose.transform.matrix);
                 } else {
                     reticle.visible = false;
                 }
