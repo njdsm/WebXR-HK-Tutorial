@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const renderer = new THREE.WebGLRenderer({alpha: true});
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.xr.enabled = true;
         document.body.appendChild(renderer.domElement);
 
         const arButton = ARButton.createButton(renderer, {requiredFeatures: ['hit-test'], optionalFeatures: ['dom-overlay'], domOverlay: {root: document.body}});
@@ -58,11 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderer.render(scene, camera);
             });
         });
-
-        renderer.xr.addEventListener("sessionstart", async () => {
-            
-        })
-
     }
     initialize();
 })
