@@ -48,14 +48,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const end = async () => {
             currentSession.end();
+            currentSession = null;
+            arButton.textContent = "Start";
             renderer.clear();
             renderer.setAnimationLoop(null);
         }
 
         arButton.addEventListener("click", () => {
             if(currentSession) {
+                console.log(currentSession);
                 end();
             } else{
+                console.log(currentSession);
                 start();
             }
 
