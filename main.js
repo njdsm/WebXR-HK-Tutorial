@@ -27,7 +27,21 @@ document.addEventListener('DOMContentLoaded', () => {
             renderer.render(scene, camera);
         });
 
+        const controller = renderer.xr.getController(0);
+
+        const events = document.querySelector("#events");
+        controller.addEventListener("selectstart", () => {
+            events.prepend("select start \n")
+        });
+        controller.addEventListener("selectend", () => {
+            events.prepend("select end \n")
+        });
+        controller.addEventListener("select", () => {
+            events.prepend("select \n")
+        });
+
         const arButton = ARButton.createButton(renderer, {optionalFeatures: ['dom-overlay'], domOverlay: {root: document.body}});
+        document.body.appendChild(renderer.domElement);
         document.body.appendChild(arButton);
     }
     initialize();
