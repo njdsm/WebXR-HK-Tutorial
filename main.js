@@ -1,22 +1,14 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r132/three.module.js';
-import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
+import { ARButton } from 'https://unpkg.com/three@0.132.0/examples/jsm/webxr/ARButton.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
     const initialize = async () => {
-        const arButton = document.querySelector("#ar-button");
-
-        const supported = navigator.xr && await navigator.xr.isSessionSupported("immersive-ar");
-        if (!supported) {
-            arButton.textContent = "Not Supported";
-            arButton.disabled = true;
-            return;
-        }
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera();
-        const renderer = new THREE.WebGLRenderer({alpha: true});
 
+        const renderer = new THREE.WebGLRenderer({alpha: true});
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(renderer.domElement);
@@ -30,40 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
         scene.add(light);
 
-        let currentSession = null;
+        renderer.xr.enabled = true;
+        renderer.setAnimationLoop(() => {
+            renderer.render(scene, camera);
+        });
 
-        const start = async () => {
-            currentSession = await navigator.xr.requestSession("immersive-ar", {optionalFeatures: ['dom-overlay'], domOverlay: {root: document.body}});
-
-            renderer.xr.enabled = true;
-            renderer.xr.setReferenceSpaceType('local');
-            await renderer.xr.setSession(currentSession);
-
-            arButton.textContent = "End";
-
-            renderer.setAnimationLoop(() => {
-                renderer.render(scene, camera);
-            });
-        }
-
-        const end = async () => {
-            currentSession.end();
-            currentSession = null;
-            arButton.textContent = "Start";
-            renderer.clear();
-            renderer.setAnimationLoop(null);
-        }
-
-        arButton.addEventListener("click", () => {
-            if(currentSession) {
-                console.log(currentSession);
-                end();
-            } else{
-                console.log(currentSession);
-                start();
-            }
-
-        })
+        const arButton = ARButton.createButton(renderer, {optionalFeatures: ['dom-overlay'], domOverlay: {root: document.body}});
+        document.body.appendChild(arButton);
     }
     initialize();
 })
