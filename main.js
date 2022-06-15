@@ -1,8 +1,17 @@
-import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r132/three.module.js';
-import { ARButton } from 'https://unpkg.com/three@0.132.0/examples/jsm/webxr/ARButton.js';
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.module.js';
+import { ARButton } from 'https://unpkg.com/three@0.134.0/examples/jsm/webxr/ARButton.js';
+import * as OC from 'https://unpkg.com/three@.134.0/examples/jsm/webxr/OrbitControls.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const initialize = async () => {
+
+        const supported = navigator.xr && await navigator.xr.isSessionSupported("immersive-ar");
+        if (!supported) {
+            arButton.textContent = "Not Supported";
+            arButton.disabled = true;
+            return;
+        }
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera();
 
@@ -26,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(renderer.domElement);
         document.body.appendChild(arButton);
 
+
+        const oc = new OC;
         const controller = renderer.xr.getController(0);
         scene.add(controller);
         controller.addEventListener('select', () => {

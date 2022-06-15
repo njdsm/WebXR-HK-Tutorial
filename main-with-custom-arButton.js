@@ -4,14 +4,7 @@ import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARB
 
 document.addEventListener('DOMContentLoaded', () => {
     const initialize = async () => {
-        const arButton = document.querySelector("#ar-button");
-
-        const supported = navigator.xr && await navigator.xr.isSessionSupported("immersive-ar");
-        if (!supported) {
-            arButton.textContent = "Not Supported";
-            arButton.disabled = true;
-            return;
-        }
+        const arButton =  document.querySelector("#ar-button");
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera();
